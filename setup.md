@@ -14,10 +14,10 @@ sudo apt install python3-pip
 ### Install Discord.py
 ```
 sudo apt install libffi-dev libnacl-dev python3-dev
-python3 -m pip install -U discord.py[voice]
+sudo python3 -m pip install -U discord.py[voice]
 ```
 
 ### Setup yt-dlp
 ```
-pip install yt-dlp
+sudo pip install yt-dlp
 ```
