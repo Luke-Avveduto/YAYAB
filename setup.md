@@ -1,17 +1,23 @@
-# Setting up YouTube-dl
-Installing the program
+# Setup Instructions from fresh WSL Unbuntu Install
 
+### Install ffmpeg  
 ```
-sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-sudo chmod a+rx /usr/local/bin/youtube-dl
-```
-
-Fix Python 
-```
-sudo ln -s /usr/bin/python3 /usr/bin/python
+sudo snap install ffmpeg
 ```
 
-Install ffmpeg
+### Install pip
 ```
-sudo snap install ffmpeg 
+sudo apt update
+sudo apt install python3-pip
+```
+
+### Install Discord.py
+```
+sudo apt install libffi-dev libnacl-dev python3-dev
+python3 -m pip install -U discord.py[voice]
+```
+
+### Setup yt-dlp
+```
+pip install yt-dlp
 ```
