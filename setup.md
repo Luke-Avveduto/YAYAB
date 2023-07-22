@@ -2,7 +2,7 @@
 
 ### Install ffmpeg  
 ```
-sudo snap install ffmpeg
+sudo apt install ffmpeg
 ```
 
 ### Install pip
