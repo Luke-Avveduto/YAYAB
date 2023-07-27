@@ -1,5 +1,6 @@
 from get_token import get_token
 
+
 import asyncio
 
 import discord
@@ -30,7 +31,6 @@ async def main():
     async with bot:
         await bot.add_cog(Music(bot))
         await bot.start(get_token())
-        await bot.app
 
 
 asyncio.run(main())

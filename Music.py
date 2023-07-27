@@ -51,7 +51,7 @@ class Music(commands.Cog):
             #Fix volume
             self.ctx.voice_client.source.volume = self.volume / 100
 
-            await self.ctx.send(f'Now playing: {self.player.title}')
+            await self.ctx.channel.send(f'Now playing: {self.player.title}')
 
             #Now we hold until the song is done by waiting on our blocker
             await self.blocker.wait()
@@ -63,6 +63,11 @@ class Music(commands.Cog):
     async def play(self, ctx, *, url):
         """Takes a link to either a song or playlist and enqueues all the songs for playing"""
 
+        if self.q.empty():
+            await ctx.send(delete_after=1, content="Playback will begin shortly", ephemeral=True)
+        else:
+            await ctx.send("Adding song(s) to the queue")
+        
         #Load the song or playlists songs into the q
         if is_playlist(url):
             for vid in get_playlist_urls(url):
@@ -72,6 +77,9 @@ class Music(commands.Cog):
 
         #Disable the paused blocker
         self.paused.set()
+
+
+
                     
     @commands.hybrid_command()
     async def volume(self, ctx, volume: int):
@@ -90,6 +98,8 @@ class Music(commands.Cog):
     async def stop(self, ctx):
         """Stops and disconnects the bot from voice"""
 
+        await ctx.reply("Playback Stopped")
+
         #Reset our q
         self.q = asyncio.Queue()
 
@@ -102,11 +112,11 @@ class Music(commands.Cog):
     async def skip(self, ctx):
         """Skips the currently playing song"""
 
-        # Set the volume to 0 to avoid playing any corruption
-        self.player.volume = 0
-        
-        await ctx.send(f'Skipped Song: {self.player.title}')
+        await ctx.reply(f'Skipped Song: {self.player.title}')
 
+        # Set the volume to 0 to avoid playing any corruption
+        self.ctx.voice_client.source.volume = 0
+        
         self.player.cleanup()
 
 
