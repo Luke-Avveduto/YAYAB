@@ -22,7 +22,7 @@ class Music(commands.Cog):
 
         bot.loop.create_task(self.player_loop())
 
-        #Thiswill be non-None when anything checks it because of the pre-command checks
+        #This will be non-None when anything checks it because of the pre-command checks
         self.ctx = None
 
 
@@ -60,7 +60,7 @@ class Music(commands.Cog):
             print("Song Finished Now")
 
 
-    @commands.command()
+    @commands.hybrid_command()
     async def play(self, ctx, *, url):
         """Takes a link to either a song or playlist and enqueues all the songs for playing"""
 
@@ -75,7 +75,7 @@ class Music(commands.Cog):
         self.paused.set()
                     
 
-    @commands.command()
+    @commands.hybrid_command()
     async def volume(self, ctx, volume: int):
         """Changes the player's volume"""
 
@@ -85,7 +85,7 @@ class Music(commands.Cog):
         ctx.voice_client.source.volume = volume / 100
         await ctx.send(f"Changed volume to {volume}%")
 
-    @commands.command()
+    @commands.hybrid_command()
     async def stop(self, ctx):
         """Stops and disconnects the bot from voice"""
 

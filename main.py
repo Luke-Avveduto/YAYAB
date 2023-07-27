@@ -22,6 +22,8 @@ bot = commands.Bot(
 
 @bot.event
 async def on_ready():
+    #Loads in slash commands
+    await bot.tree.sync()
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
 
@@ -30,6 +32,7 @@ async def main():
     async with bot:
         await bot.add_cog(Music(bot))
         await bot.start(get_token())
+        await bot.app
 
 
 asyncio.run(main())
