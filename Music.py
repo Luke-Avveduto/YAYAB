@@ -13,7 +13,7 @@ class Music(commands.Cog):
         self.q = asyncio.Queue()
         self.blocker = asyncio.Event()
 
-        self.default_volume = 10
+        self.volume = 10
 
         self.player = None
 
@@ -49,7 +49,7 @@ class Music(commands.Cog):
             self.ctx.voice_client.play(self.player, after=lambda _: self.bot.loop.call_soon_threadsafe(self.blocker.set))
             
             #Fix volume
-            self.ctx.voice_client.source.volume = self.default_volume / 100
+            self.ctx.voice_client.source.volume = self.volume / 100
 
             await self.ctx.send(f'Now playing: {self.player.title}')
 
@@ -58,7 +58,6 @@ class Music(commands.Cog):
 
 
             print("Song Finished Now")
-
 
     @commands.hybrid_command()
     async def play(self, ctx, *, url):
@@ -74,7 +73,6 @@ class Music(commands.Cog):
         #Disable the paused blocker
         self.paused.set()
                     
-
     @commands.hybrid_command()
     async def volume(self, ctx, volume: int):
         """Changes the player's volume"""
@@ -84,6 +82,9 @@ class Music(commands.Cog):
 
         ctx.voice_client.source.volume = volume / 100
         await ctx.send(f"Changed volume to {volume}%")
+
+        #Update volume so next song will also use it
+        self.volume = volume
 
     @commands.hybrid_command()
     async def stop(self, ctx):
@@ -97,7 +98,20 @@ class Music(commands.Cog):
 
         await ctx.voice_client.disconnect()
 
+    @commands.hybrid_command()
+    async def skip(self, ctx):
+        """Skips the currently playing song"""
+
+        # Set the volume to 0 to avoid playing any corruption
+        self.player.volume = 0
+        
+        await ctx.send(f'Skipped Song: {self.player.title}')
+
+        self.player.cleanup()
+
+
     @play.before_invoke
+    @skip.before_invoke
     async def ensure_voice(self, ctx):
         if ctx.voice_client is None:
             if ctx.author.voice:
