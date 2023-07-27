@@ -1,4 +1,4 @@
-# Setup Instructions from fresh WSL Unbuntu Install
+# Setup Instructions from fresh WSL Ubuntu Install
 
 ### Install ffmpeg  
 ```
