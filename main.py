@@ -1,10 +1,8 @@
 from get_token import get_token
 
-
 import asyncio
 
 import discord
-import yt_dlp
 
 from Music import Music
 from discord.ext import commands
