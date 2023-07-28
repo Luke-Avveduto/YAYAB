@@ -10,8 +10,6 @@ def get_playlist_urls(source):
 
     playlist = pytube.Playlist(source)
 
-    print(playlist.title)
-
     #If source is the direct link to a playlist
     if "?list" in source:
         for vid in playlist.videos:
@@ -37,3 +35,5 @@ def is_playlist(source):
     if "&list" in source or "?list" in source:
         return True
     return False
+
+print(is_playlist("https://www.youtube.com/watch?v=0kSzP8syBt0"))

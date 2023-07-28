@@ -1,5 +1,6 @@
 from get_token import get_token
 
+import json
 
 import asyncio
 
@@ -29,8 +30,11 @@ async def on_ready():
 
 async def main():
     async with bot:
+        with open('config.json') as config:
+            c = json.load(config)
+            token = c['token']
         await bot.add_cog(Music(bot))
-        await bot.start(get_token())
+        await bot.start(token)
 
 
 asyncio.run(main())
