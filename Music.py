@@ -15,6 +15,7 @@ class Music(commands.Cog):
 
         self.volume = 10
 
+        self.playing = False
         self.player = None
 
         self.paused = asyncio.Event()
@@ -24,6 +25,10 @@ class Music(commands.Cog):
 
         #This will be non-None when anything checks it because of the pre-command checks
         self.ctx = None
+
+    def after_player_stop(self, e):
+        self.playing = False
+        self.bot.loop.call_soon_threadsafe(self.blocker.set)
 
 
     #The bot always trying to play music in the queue
@@ -46,8 +51,10 @@ class Music(commands.Cog):
             self.player = await YTDLSource.from_url(url, loop=self.bot.loop, stream = True)
             
             #Once the song is done, our blocker will unblock and we will we will loop
-            self.ctx.voice_client.play(self.player, after=lambda _: self.bot.loop.call_soon_threadsafe(self.blocker.set))
+            self.ctx.voice_client.play(self.player, after=self.after_player_stop)
             
+            self.playing = True
+
             #Fix volume
             self.ctx.voice_client.source.volume = self.volume / 100
 
@@ -59,28 +66,30 @@ class Music(commands.Cog):
 
             print("Song Finished Now")
 
+    @commands.has_permissions(administrator=True)
     @commands.hybrid_command()
     async def play(self, ctx, *, url):
         """Takes a link to either a song or playlist and enqueues all the songs for playing"""
 
-        if self.q.empty():
+        if not self.playing:
+            print("Nothing is playing right now")
             await ctx.send(delete_after=1, content="Playback will begin shortly", ephemeral=True)
         else:
+            print("Something is playing right now")
             await ctx.send("Adding song(s) to the queue")
         
         #Load the song or playlists songs into the q
         if is_playlist(url):
             for vid in get_playlist_urls(url):
+                print(vid)
                 await self.q.put(vid)
         else:
+            print(url)
             await self.q.put(url)
 
-        #Disable the paused blocker
-        self.paused.set()
+        
 
-
-
-                    
+    @commands.has_permissions(administrator=True)              
     @commands.hybrid_command()
     async def volume(self, ctx, volume: int):
         """Changes the player's volume"""
@@ -94,6 +103,7 @@ class Music(commands.Cog):
         #Update volume so next song will also use it
         self.volume = volume
 
+    @commands.has_permissions(administrator=True)
     @commands.hybrid_command()
     async def stop(self, ctx):
         """Stops and disconnects the bot from voice"""
@@ -108,6 +118,7 @@ class Music(commands.Cog):
 
         await ctx.voice_client.disconnect()
 
+    @commands.has_permissions(administrator=True)
     @commands.hybrid_command()
     async def skip(self, ctx):
         """Skips the currently playing song"""
@@ -130,5 +141,3 @@ class Music(commands.Cog):
             else:
                 await ctx.send("You are not connected to a voice channel.")
                 raise commands.CommandError("Author not connected to a voice channel.")
-        elif ctx.voice_client.is_playing():
-            ctx.voice_client.stop()
