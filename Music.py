@@ -1,10 +1,8 @@
 import asyncio
-
 from discord.ext import commands
-
 from YTDLSource import YTDLSource
-
 from playlists import get_playlist_urls, is_playlist
+
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -36,7 +34,6 @@ class Music(commands.Cog):
         await self.bot.wait_until_ready()
 
         while not self.bot.is_closed():
-            
             print("Blocker enabled")
             #Set the blocker to hold mode
             self.blocker.clear()

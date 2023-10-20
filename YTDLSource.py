@@ -1,7 +1,5 @@
 import discord
-
 import yt_dlp
-
 import asyncio
 
 # Suppress noise about console usage from errors

@@ -27,13 +27,12 @@ def get_playlist_urls(source):
     return urls
 
 
-'''
-This function determines if a URL is to a playlist or just a normal video. 
-Returns True if playlist link, False Otherwise.
-'''
+
 def is_playlist(source):
+    '''
+    This function determines if a URL is to a playlist or just a normal video. 
+    Returns True if playlist link, False otherwise.
+    '''
     if "&list" in source or "?list" in source:
         return True
     return False
-
-print(is_playlist("https://www.youtube.com/watch?v=0kSzP8syBt0"))

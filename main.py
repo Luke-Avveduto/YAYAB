@@ -1,11 +1,7 @@
 from get_token import get_token
-
 import json
-
 import asyncio
-
 import discord
-
 from Music import Music
 from discord.ext import commands
 
@@ -15,7 +11,7 @@ intents.message_content = True
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("!"),
-    description='Relatively simple music bot example',
+    description='YAYAB',
     intents=intents
 )
 
@@ -24,7 +20,7 @@ bot = commands.Bot(
 async def on_ready():
     #Loads in slash commands
     await bot.tree.sync()
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print(f'YAYAB Instance Started as {bot.user} (ID: {bot.user.id})')
     print('------')
 
 
